@@ -56,6 +56,6 @@ class User extends Authenticatable
     //一个用户可以有多个微博
     public function statuses()
     {
-        return $this->hasMany(status::class);
+        return $this->hasMany(Status::class);
     }
 }
