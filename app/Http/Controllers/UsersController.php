@@ -7,6 +7,17 @@ use Illuminate\Http\Request;
 
 class UsersController extends Controller
 {
+    //中间件 过滤机制 未登录用户访问的动作
+    public function __construct()
+    {
+        $this->middleware('auth',[
+           'except' => ['show','create','store']
+        ]);
+
+        $this->middleware('guest',[
+            'only' => ['create']
+        ]);
+    }
     //
     public function create()
     {
@@ -41,12 +52,14 @@ class UsersController extends Controller
     //编辑用户个人信息页面
     public function edit(User $user)
     {
+        $this->authorize('update',$user);
         return view('users.edit',compact('user'));
     }
 
     //编辑资料提交验证
     public function update(User $user, Request $request)
     {
+        $this->authorize('update',$user);
         $this->validate($request,[
             'name' => 'required|max:50',
             'password' => 'nullable|confirmed|min:6'
