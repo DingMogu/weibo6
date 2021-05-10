@@ -76,10 +76,18 @@ class UsersController extends Controller
         session()->flash('success','个人资料更新完成');
         return redirect()->route('users.show',$user);
     }
-
+    //用户列表显示
     public function index()
     {
         $users = User::paginate(10);
         return view('users.index',compact('users'));
+    }
+
+    public function destroy(User $user)
+    {
+        $this->authorize('destroy',$user);
+        $user->delete();
+        session()->flash('success','成功删除用户!');
+        return back();
     }
 }
